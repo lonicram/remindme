@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,11 +25,26 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
             }
         });
+
+        final ListView profilesList = (ListView)findViewById(R.id.list_profiles);
+
+        String[] profiles_names = new String[]{"J Smith", "M Ol"};
+        ArrayAdapter<String> profilesListAdapter = new ArrayAdapter<String>(this,
+            android.R.layout.simple_list_item_1, profiles_names);
+
+        profilesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+            String item = (String) profilesList.getItemAtPosition(position);
+            }
+        });
+        profilesList.setAdapter(profilesListAdapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void saveUserProfile(){
+    public void selectUserProfile(View view){
 
     }
 
