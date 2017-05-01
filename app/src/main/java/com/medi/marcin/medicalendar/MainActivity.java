@@ -1,5 +1,6 @@
 package com.medi.marcin.medicalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,19 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
         final ListView profilesList = (ListView)findViewById(R.id.list_profiles);
 
-        String[] profiles_names = new String[]{"J Smith", "M Ol"};
+        String[] profiles_names = new String[]{"J Smith", "M Ol"}; // get it from DB
         ArrayAdapter<String> profilesListAdapter = new ArrayAdapter<String>(this,
             android.R.layout.simple_list_item_1, profiles_names);
 
         profilesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-            String item = (String) profilesList.getItemAtPosition(position);
+                String item = (String) profilesList.getItemAtPosition(position);
+                selectUserProfile(v, item);
             }
         });
         profilesList.setAdapter(profilesListAdapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,12 +67,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void selectUserProfile(View view){
-
+    /*
+    Start activity for selected user profile,
+    pass username to new activity.
+     */
+    public void selectUserProfile(View view, String userProfileName){
+        System.out.println("Item " + userProfileName);
     }
-
-    public void chooseUserProfile(){
-
+    /*
+    Go to 'Register New Profile' screen.
+     */
+    public void createNewUserProfile(View view){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
