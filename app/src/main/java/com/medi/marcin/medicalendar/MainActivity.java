@@ -13,6 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.List;
+
+import static com.medi.marcin.medicalendar.FeedReaderContract.listUsernames;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -33,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         final ListView profilesList = (ListView)findViewById(R.id.list_profiles);
 
-        String[] profiles_names = new String[]{"J Smith", "M Ol"}; // get it from DB
+        List profileNames = listUsernames(getApplicationContext());
+
         ArrayAdapter<String> profilesListAdapter = new ArrayAdapter<String>(this,
-            android.R.layout.simple_list_item_1, profiles_names);
+            android.R.layout.simple_list_item_1, profileNames);
 
         profilesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {

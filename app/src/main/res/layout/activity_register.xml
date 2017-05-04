@@ -4,48 +4,42 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/txt_profile_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Profile Name" />
-
-    <EditText
         android:id="@+id/txt_first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="First Name" />
+        android:hint="First Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/txt_last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Last Name" />
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/txt_mobile_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Mobile Phone" />
+        android:hint="Mobile Phone"
+        android:inputType="textPersonName|phone" />
 
-    <EditText
+    <TextView
         android:id="@+id/txt_date_of_birth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:text="Date of birth" />
+        android:lineSpacingExtra="14sp"
+        android:onClick="showDatePickerDialog"
+        android:text="Click to pick up date"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/btn_save_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="onRegisterClick"
         android:text="Confirm" />
 </LinearLayout>

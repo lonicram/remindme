@@ -1,13 +1,20 @@
 package com.medi.marcin.medicalendar;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import static com.medi.marcin.medicalendar.FeedReaderContract.addProfile;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -41,4 +48,20 @@ public class RegisterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handle click event, when user adds a profile
+     * @param view
+     */
+    public void onRegisterClick(View view){
+        String firstName = ((EditText)findViewById(R.id.txt_first_name)).getText().toString();
+        String lastName = ((EditText)findViewById(R.id.txt_last_name)).getText().toString();
+        String mobilePhone = ((EditText)findViewById(R.id.txt_mobile_phone)).getText().toString();
+        String dateOfBirth = ((TextView)findViewById(R.id.txt_date_of_birth)).getText().toString();
+        addProfile(getApplicationContext(), firstName, lastName, mobilePhone, dateOfBirth);
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
 }
