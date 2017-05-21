@@ -28,6 +28,14 @@ public final class FeedReaderContract {
         public static final String COLUMN_NAME_MOBILE_PHONE = "mobile_phone";
         public static final String COLUMN_NAME_DATE_OF_BIRTH = "date_of_birth";
     }
+    public static class ReminderEntry implements BaseColumns {
+        public static final String TABLE_NAME = "reminder";
+        public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_TIME = "time";
+        public static final String COLUMN_COMMENT = "comment";
+        public static final String COLUMN_PROFILE_ID = "profile_id";
+    }
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
@@ -36,7 +44,16 @@ public final class FeedReaderContract {
                     ProfileEntry.COLUMN_NAME_FIRST_NAME + " TEXT," +
                     ProfileEntry.COLUMN_NAME_LAST_NAME + " TEXT," +
                     ProfileEntry.COLUMN_NAME_MOBILE_PHONE + " TEXT," +
-                    ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH + " DATE)";
+                    ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH + " DATE);" +
+            "CREATE TABLE " + ReminderEntry.TABLE_NAME + " (" +
+                    ReminderEntry._ID + " INTEGER PRIMARY KEY," +
+                    ReminderEntry.COLUMN_COMMENT + " TEXT," +
+                    ReminderEntry.COLUMN_DATE + " TEXT," +
+                    ReminderEntry.COLUMN_TIME + " TEXT," +
+                    ReminderEntry.COLUMN_TITLE + " TEXT," +
+                    ReminderEntry.COLUMN_PROFILE_ID + " INTEGER);" +
+                    " FOREIGN KEY ("+ ReminderEntry.COLUMN_PROFILE_ID +") " +
+                    "REFERENCES "+ ProfileEntry.TABLE_NAME +"("+ ProfileEntry.COLUMN_NAME_USERNAME +")";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + ProfileEntry.TABLE_NAME;
@@ -230,6 +247,153 @@ public final class FeedReaderContract {
         return db.delete(ProfileEntry.TABLE_NAME, "username = ?", whereArgs) > 0;
     }
 
+
+    // reminders part
+    // TODO: consider moving it to separate file
+
+    /**
+     * Add Entry to DB
+     */
+    public static void addReminder(
+            Context context,
+            String comment,
+            String date,
+            String time,
+            String title,
+            String username
+    ){
+        SQLiteDatabase db = getWritableDb(context);
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ReminderEntry.COLUMN_COMMENT, comment);
+        values.put(ReminderEntry.COLUMN_DATE, date);
+        values.put(ReminderEntry.COLUMN_TIME, time);
+        values.put(ReminderEntry.COLUMN_TITLE, title);
+        values.put(ReminderEntry.COLUMN_PROFILE_ID, username);
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(ReminderEntry.TABLE_NAME, null, values);
+    }
+
+    public static List listReminders(Context context) {
+        SQLiteDatabase db = getReadableDb(context);
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                ReminderEntry._ID,
+                ReminderEntry.COLUMN_TITLE,
+                ReminderEntry.COLUMN_COMMENT,
+                ReminderEntry.COLUMN_DATE,
+                ReminderEntry.COLUMN_TIME
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ReminderEntry.COLUMN_TITLE + " DESC";
+
+        Cursor cursor = db.query(
+                ReminderEntry.TABLE_NAME,                  // The table to query
+                projection,                               // The columns to return
+                null,                                     // The columns for the WHERE clause
+                null,                                     // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        List items = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String username = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_TITLE));
+            items.add(username);
+        }
+        cursor.close();
+        return items;
+    }
+
+    public static Hashtable<String, String> getReminderInfo(Context context, String reminder_id) {
+        SQLiteDatabase db = getReadableDb(context);
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                ReminderEntry._ID,
+                ReminderEntry.COLUMN_COMMENT,
+                ReminderEntry.COLUMN_DATE,
+                ReminderEntry.COLUMN_TIME,
+                ReminderEntry.COLUMN_TITLE,
+                ReminderEntry.COLUMN_PROFILE_ID
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ReminderEntry.COLUMN_TITLE + " DESC";
+        String[] where_criteria = {reminder_id};
+
+        Cursor cursor = db.query(
+                ReminderEntry.TABLE_NAME,                      // The table to query
+                projection,                                   // The columns to return
+                ReminderEntry._ID + " = ? ",  // The columns for the WHERE clause
+                where_criteria,                               // The values for the WHERE clause
+                null,                                         // don't group the rows
+                null,                                         // don't filter by row groups
+                sortOrder                                     // The sort order
+        );
+
+        Hashtable<String, String> reminderData = new Hashtable<>();
+        while (cursor.moveToNext()) {
+            reminderData.put(
+                    "title", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_TITLE))
+            );
+            reminderData.put(
+                    "comment", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_COMMENT))
+            );
+            reminderData.put(
+                    "date", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_DATE))
+            );
+            reminderData.put(
+                    "time", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_TIME))
+            );
+            reminderData.put(
+                    "id", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ReminderEntry._ID))
+            );
+
+        }
+        cursor.close();
+        return reminderData;
+    }
+
+    public static int updateReminder(
+            Context context,
+            String comment,
+            String date,
+            String time,
+            String title,
+            Integer id
+    ){
+        SQLiteDatabase db = getWritableDb(context);
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ReminderEntry.COLUMN_COMMENT, comment);
+        values.put(ReminderEntry.COLUMN_DATE, date);
+        values.put(ReminderEntry.COLUMN_TIME, time);
+        values.put(ReminderEntry.COLUMN_TITLE, title);
+
+        String[] whereArgs = {Integer.toString(id)};
+        // Insert the new row, returning the primary key value of the new row
+        int newRowId = db.update(ProfileEntry.TABLE_NAME, values, "_id=?", whereArgs);
+        return newRowId;
+    }
+
+    public static boolean deleteReminder(Context context, String id){
+        SQLiteDatabase db = getWritableDb(context);
+        String[] whereArgs = {id};
+        return db.delete(ProfileEntry.TABLE_NAME, "_id = ?", whereArgs) > 0;
+    }
 }
 
 

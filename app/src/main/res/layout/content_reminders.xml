@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.medi.marcin.medicalendar.MainActivity"
-    tools:showIn="@layout/activity_main"
+    tools:context="com.medi.marcin.medicalendar.RemindersListActivity"
+    tools:showIn="@layout/activity_reminders"
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
@@ -28,17 +28,16 @@
         app:layout_constraintHorizontal_bias="0.503" />
 
     <Button
-        android:id="@+id/btn_create"
+        android:id="@+id/btn_create_reminder"
         android:layout_width="210dp"
         android:layout_height="49dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="@android:color/holo_blue_dark"
-        android:onClick="createNewUserProfile"
-        android:text="Create new profile"
+        android:onClick="goToReminderView"
+        android:text="Add Reminder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -50,20 +49,19 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="Select Reminder"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <ListView
-        android:id="@+id/list_profiles"
+        android:id="@+id/reminders_list"
         android:layout_width="264dp"
         android:layout_height="291dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_create"
+        app:layout_constraintBottom_toTopOf="@+id/btn_create_reminder"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import static com.medi.marcin.medicalendar.FeedReaderContract.addProfile;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -61,7 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new DatePickerFragment(
+                ((TextView)findViewById(R.id.txt_date_of_birth))
+        );
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }

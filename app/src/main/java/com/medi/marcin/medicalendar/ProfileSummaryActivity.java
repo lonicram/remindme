@@ -26,6 +26,7 @@ import static com.medi.marcin.medicalendar.FeedReaderContract.deleteProfileInDat
  */
 
 public class ProfileSummaryActivity extends AppCompatActivity {
+    public String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +35,8 @@ public class ProfileSummaryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
-        Hashtable<String, String> userData = getUserInfo(getApplicationContext(), username);
+        this.username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
+        Hashtable<String, String> userData = getUserInfo(getApplicationContext(), this.username);
         System.out.println(userData);
         // fill fields with user profile data
         ((EditText)findViewById(R.id.txt_first_name)).setText(userData.get("firstName"));
@@ -45,7 +46,7 @@ public class ProfileSummaryActivity extends AppCompatActivity {
 
         // hide original button and show new one
         findViewById(R.id.btn_save_profile).setVisibility(View.INVISIBLE);
-        findViewById(R.id.btn_add_reminder).setVisibility(View.VISIBLE);
+        findViewById(R.id.btn_reminders).setVisibility(View.VISIBLE);
         findViewById(R.id.btn_update_profile).setVisibility(View.VISIBLE);
         findViewById(R.id.btn_delete_profile).setVisibility(View.VISIBLE);
     }
@@ -77,24 +78,30 @@ public class ProfileSummaryActivity extends AppCompatActivity {
      * @param view
      */
     public void onEditClick(View view){
-        Intent intent = getIntent();
-        String username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
 
         String firstName = ((EditText)findViewById(R.id.txt_first_name)).getText().toString();
         String lastName = ((EditText)findViewById(R.id.txt_last_name)).getText().toString();
         String mobilePhone = ((EditText)findViewById(R.id.txt_mobile_phone)).getText().toString();
         String dateOfBirth = ((TextView)findViewById(R.id.txt_date_of_birth)).getText().toString();
         updateProfile(
-                getApplicationContext(), username, firstName, lastName, dateOfBirth, mobilePhone);
+                getApplicationContext(), this.username, firstName, lastName, dateOfBirth, mobilePhone);
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new DatePickerFragment(
+                ((TextView) findViewById(R.id.txt_date_of_birth))
+        );
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     public void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToReminders(View view){
+        Intent intent = new Intent(this, RemindersListActivity.class);
+        intent.putExtra(MainActivity.PROFILENAME_MESSAGE, this.username);
         startActivity(intent);
     }
 

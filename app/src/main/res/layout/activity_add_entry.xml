@@ -17,39 +17,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Title"
         android:inputType="textPersonName"
-        android:text="Title" />
-
-    <EditText
-        android:id="@+id/txt_entry_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:text="Date" />
-
-    <EditText
-        android:id="@+id/txt_entry_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        android:text="Time" />
+        android:layout_weight="0.09" />
 
     <EditText
         android:id="@+id/txt_entry_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.05"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Comment"
-        android:layout_weight="0.22" />
+        android:hint="Comment"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/txt_entry_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:lineSpacingExtra="8sp"
+        android:text="Date"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
+        android:layout_weight="0.09" />
+
+    <TextView
+        android:id="@+id/txt_entry_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.11"
+        android:ems="10"
+        android:hint="Time"
+        android:inputType="time"
+        android:lineSpacingExtra="8sp"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btn_entry_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_green_light"
+        android:onClick="saveReminder"
         android:text="Confirm" />
 
     <Button
@@ -58,4 +66,14 @@
         android:layout_height="wrap_content"
         android:background="@android:color/holo_red_dark"
         android:text="Delete" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 </LinearLayout>

@@ -19,6 +19,11 @@ import org.w3c.dom.Text;
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
+    TextView dateField;
+
+    public DatePickerFragment(TextView dateField){
+        this.dateField = dateField;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -34,8 +39,7 @@ public class DatePickerFragment extends DialogFragment
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        TextView dateOfBirthField = (TextView) getActivity().findViewById(R.id.txt_date_of_birth);
         String dateOfBirthValue = year + "-" + month + "-" + day;
-        dateOfBirthField.setText(dateOfBirthValue);
+        this.dateField.setText(dateOfBirthValue);
     }
 }

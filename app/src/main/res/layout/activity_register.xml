@@ -44,10 +44,11 @@
         android:text="Confirm Changes" />
 
     <Button
-        android:id="@+id/btn_add_reminder"
+        android:id="@+id/btn_reminders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Reminder"
+        android:onClick="goToReminders"
+        android:text="Reminders"
         android:visibility="invisible" />
 
     <Button
