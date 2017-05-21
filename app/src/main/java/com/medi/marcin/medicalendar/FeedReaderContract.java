@@ -1,7 +1,10 @@
 package com.medi.marcin.medicalendar;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -198,6 +201,33 @@ public final class FeedReaderContract {
         }
         cursor.close();
         return userData;
+    }
+
+    public static int updateProfile(
+            Context context,
+            String username,
+            String firstName,
+            String lastName,
+            String dateOfBirth,
+            String mobilePhone
+    ){
+        SQLiteDatabase db = getWritableDb(context);
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(ProfileEntry.COLUMN_NAME_FIRST_NAME, firstName);
+        values.put(ProfileEntry.COLUMN_NAME_LAST_NAME, lastName);
+        values.put(ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH, dateOfBirth);
+        values.put(ProfileEntry.COLUMN_NAME_MOBILE_PHONE, mobilePhone);
+        String[] whereArgs = {username};
+        // Insert the new row, returning the primary key value of the new row
+        int newRowId = db.update(ProfileEntry.TABLE_NAME, values, "username=?", whereArgs);
+        return newRowId;
+    }
+
+    public static boolean deleteProfileInDatabase(Context context, String username){
+        SQLiteDatabase db = getWritableDb(context);
+        String[] whereArgs = {username};
+        return db.delete(ProfileEntry.TABLE_NAME, "username = ?", whereArgs) > 0;
     }
 
 }

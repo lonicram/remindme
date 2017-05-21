@@ -44,9 +44,25 @@
         android:text="Confirm Changes" />
 
     <Button
-        android:id="@+id/add_reminder"
+        android:id="@+id/btn_add_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Reminder"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_update_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onEditClick"
+        android:text="Confirm Profile Changes"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_delete_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="deleteProfile"
+        android:text="Delete"
         android:visibility="invisible" />
 </LinearLayout>

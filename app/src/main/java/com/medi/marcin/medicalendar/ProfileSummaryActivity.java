@@ -1,5 +1,8 @@
 package com.medi.marcin.medicalendar;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +17,9 @@ import android.widget.TextView;
 import java.util.Hashtable;
 
 import static com.medi.marcin.medicalendar.FeedReaderContract.getUserInfo;
+import static com.medi.marcin.medicalendar.FeedReaderContract.updateProfile;
+import static com.medi.marcin.medicalendar.FeedReaderContract.deleteProfileInDatabase;
+
 
 /**
  * Created by marcin on 21.05.17.
@@ -36,6 +42,12 @@ public class ProfileSummaryActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.txt_last_name)).setText(userData.get("lastName"));
         ((EditText)findViewById(R.id.txt_mobile_phone)).setText(userData.get("mobilePhone"));
         ((TextView)findViewById(R.id.txt_date_of_birth)).setText(userData.get("dateOfBirth"));
+
+        // hide original button and show new one
+        findViewById(R.id.btn_save_profile).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btn_add_reminder).setVisibility(View.VISIBLE);
+        findViewById(R.id.btn_update_profile).setVisibility(View.VISIBLE);
+        findViewById(R.id.btn_delete_profile).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -65,14 +77,51 @@ public class ProfileSummaryActivity extends AppCompatActivity {
      * @param view
      */
     public void onEditClick(View view){
+        Intent intent = getIntent();
+        String username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
+
         String firstName = ((EditText)findViewById(R.id.txt_first_name)).getText().toString();
         String lastName = ((EditText)findViewById(R.id.txt_last_name)).getText().toString();
         String mobilePhone = ((EditText)findViewById(R.id.txt_mobile_phone)).getText().toString();
         String dateOfBirth = ((TextView)findViewById(R.id.txt_date_of_birth)).getText().toString();
+        updateProfile(
+                getApplicationContext(), username, firstName, lastName, dateOfBirth, mobilePhone);
     }
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void goToMain(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void deleteProfile(View view){
+        final Intent intent = getIntent();
+        final String username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(ProfileSummaryActivity.this);
+        builder1.setMessage("Are you sure?");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteProfileInDatabase(getApplicationContext(), username);
+                        goToMain();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
