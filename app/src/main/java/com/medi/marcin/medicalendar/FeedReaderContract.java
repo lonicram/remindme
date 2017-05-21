@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public final class FeedReaderContract {
@@ -142,6 +143,63 @@ public final class FeedReaderContract {
         cursor.close();
         return itemUsernames;
     }
+
+    public static Hashtable<String, String> getUserInfo(Context context, String username) {
+        SQLiteDatabase db = getReadableDb(context);
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                ProfileEntry._ID,
+                ProfileEntry.COLUMN_NAME_FIRST_NAME,
+                ProfileEntry.COLUMN_NAME_LAST_NAME,
+                ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH,
+                ProfileEntry.COLUMN_NAME_USERNAME,
+                ProfileEntry.COLUMN_NAME_MOBILE_PHONE
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                ProfileEntry.COLUMN_NAME_USERNAME + " DESC";
+        String[] where_criteria = {username};
+
+        Cursor cursor = db.query(
+                ProfileEntry.TABLE_NAME,                      // The table to query
+                projection,                                   // The columns to return
+                ProfileEntry.COLUMN_NAME_USERNAME + " = ? ",  // The columns for the WHERE clause
+                where_criteria,                               // The values for the WHERE clause
+                null,                                         // don't group the rows
+                null,                                         // don't filter by row groups
+                sortOrder                                     // The sort order
+        );
+
+        Hashtable<String, String> userData = new Hashtable<>();
+        while (cursor.moveToNext()) {
+            userData.put(
+                    "username", cursor.getString(
+                        cursor.getColumnIndexOrThrow(ProfileEntry.COLUMN_NAME_USERNAME))
+            );
+            userData.put(
+                    "firstName", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ProfileEntry.COLUMN_NAME_FIRST_NAME))
+            );
+            userData.put(
+                    "lastName", cursor.getString(
+                    cursor.getColumnIndexOrThrow(ProfileEntry.COLUMN_NAME_LAST_NAME))
+            );
+            userData.put(
+                    "mobilePhone", cursor.getString(
+                    cursor.getColumnIndexOrThrow(ProfileEntry.COLUMN_NAME_MOBILE_PHONE))
+            );
+            userData.put(
+                    "dateOfBirth", cursor.getString(
+                            cursor.getColumnIndexOrThrow(ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH))
+            );
+
+        }
+        cursor.close();
+        return userData;
+    }
+
 }
 
 

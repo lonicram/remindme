@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:lineSpacingExtra="14sp"
         android:onClick="showDatePickerDialog"
-        android:text="Click to pick up date"
+        android:text='Click to pick up "Date of Birth"'
         android:textSize="24sp" />
 
     <Button
@@ -41,5 +41,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onRegisterClick"
-        android:text="Confirm" />
+        android:text="Confirm Changes" />
+
+    <Button
+        android:id="@+id/add_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Reminder"
+        android:visibility="invisible" />
 </LinearLayout>

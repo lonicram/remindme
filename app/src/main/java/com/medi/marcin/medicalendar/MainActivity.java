@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
 import static com.medi.marcin.medicalendar.FeedReaderContract.listUsernames;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String PROFILENAME_MESSAGE = "medi.PROFILENAME_MSG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void selectUserProfile(View view, String userProfileName){
         System.out.println("Item " + userProfileName);
+        Intent intent = new Intent(this, ProfileSummaryActivity.class);
+        intent.putExtra(PROFILENAME_MESSAGE, userProfileName);
+        startActivity(intent);
     }
     /*
     Go to 'Register New Profile' screen.
