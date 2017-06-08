@@ -42,7 +42,7 @@ public class RemindersListActivity extends AppCompatActivity {
 
         final ListView profilesList = (ListView)findViewById(R.id.reminders_list);
 
-        List remindersIDs = listReminders(getApplicationContext(), this.username);
+        final List remindersIDs = listReminders(getApplicationContext(), this.username);
         List remindersNames = new ArrayList<>();
         for (int i=0; i<remindersIDs.size(); i++){
             Hashtable<String, String> reminderData = new Hashtable<>();
@@ -59,9 +59,9 @@ public class RemindersListActivity extends AppCompatActivity {
 
         profilesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-                String item = (String) profilesList.getItemAtPosition(position);
+                String reminderID = (String) remindersIDs.get(position);
                 // go to reminder
-
+                goToReminderView(reminderID);
             }
         });
         profilesList.setAdapter(profilesListAdapter);
@@ -89,9 +89,10 @@ public class RemindersListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToReminderView(View view){
+    public void goToReminderView(String id){
         Intent intent = new Intent(this, ReminderActivity.class);
         intent.putExtra(MainActivity.PROFILENAME_MESSAGE, this.username);
+        intent.putExtra(this.REMINDER_ID, id);
         startActivity(intent);
     }
 

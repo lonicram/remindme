@@ -376,7 +376,7 @@ public final class FeedReaderContract {
             String date,
             String time,
             String title,
-            Integer id
+            String id
     ){
         SQLiteDatabase db = getWritableDb(context);
         // Create a new map of values, where column names are the keys
@@ -386,7 +386,7 @@ public final class FeedReaderContract {
         values.put(ReminderEntry.COLUMN_TIME, time);
         values.put(ReminderEntry.COLUMN_TITLE, title);
 
-        String[] whereArgs = {Integer.toString(id)};
+        String[] whereArgs = {id};
         // Insert the new row, returning the primary key value of the new row
         int newRowId = db.update(ProfileEntry.TABLE_NAME, values, "_id=?", whereArgs);
         return newRowId;
