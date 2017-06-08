@@ -85,6 +85,7 @@ public class ProfileSummaryActivity extends AppCompatActivity {
         String dateOfBirth = ((TextView)findViewById(R.id.txt_date_of_birth)).getText().toString();
         updateProfile(
                 getApplicationContext(), this.username, firstName, lastName, dateOfBirth, mobilePhone);
+        goToMain();
     }
 
     public void showDatePickerDialog(View v) {

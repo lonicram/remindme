@@ -37,14 +37,15 @@ public final class FeedReaderContract {
         public static final String COLUMN_PROFILE_ID = "profile_id";
     }
 
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_PROFILE =
             "CREATE TABLE " + ProfileEntry.TABLE_NAME + " (" +
                     ProfileEntry._ID + " INTEGER PRIMARY KEY," +
                     ProfileEntry.COLUMN_NAME_USERNAME + " TEXT UNIQUE," +
                     ProfileEntry.COLUMN_NAME_FIRST_NAME + " TEXT," +
                     ProfileEntry.COLUMN_NAME_LAST_NAME + " TEXT," +
                     ProfileEntry.COLUMN_NAME_MOBILE_PHONE + " TEXT," +
-                    ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH + " DATE);" +
+                    ProfileEntry.COLUMN_NAME_DATE_OF_BIRTH + " DATE); ";
+    private static final String SQL_CREATE_REMINDER =
             "CREATE TABLE " + ReminderEntry.TABLE_NAME + " (" +
                     ReminderEntry._ID + " INTEGER PRIMARY KEY," +
                     ReminderEntry.COLUMN_COMMENT + " TEXT," +
@@ -53,21 +54,23 @@ public final class FeedReaderContract {
                     ReminderEntry.COLUMN_TITLE + " TEXT," +
                     ReminderEntry.COLUMN_PROFILE_ID + " INTEGER);" +
                     " FOREIGN KEY ("+ ReminderEntry.COLUMN_PROFILE_ID +") " +
-                    "REFERENCES "+ ProfileEntry.TABLE_NAME +"("+ ProfileEntry.COLUMN_NAME_USERNAME +")";
+                    "REFERENCES "+ ProfileEntry.TABLE_NAME +"("+ ProfileEntry.COLUMN_NAME_USERNAME +");";
 
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + ProfileEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + ProfileEntry.TABLE_NAME +
+            ";DROP TABLE IF EXISTS " + ReminderEntry.TABLE_NAME;
 
     public static class FeedReaderDbHelper extends SQLiteOpenHelper {
         // If you change the database schema, you must increment the database version.
-        public static final int DATABASE_VERSION = 1;
+        public static final int DATABASE_VERSION = 6;
         public static final String DATABASE_NAME = "EntriesReader.db";
 
         public FeedReaderDbHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_ENTRIES);
+            db.execSQL(SQL_CREATE_PROFILE);
+            db.execSQL(SQL_CREATE_REMINDER);
         }
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // No migrations mechanism implemented, delete and create database
@@ -275,7 +278,7 @@ public final class FeedReaderContract {
         long newRowId = db.insert(ReminderEntry.TABLE_NAME, null, values);
     }
 
-    public static List listReminders(Context context) {
+    public static List listReminders(Context context, String username) {
         SQLiteDatabase db = getReadableDb(context);
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -290,12 +293,12 @@ public final class FeedReaderContract {
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
                 ReminderEntry.COLUMN_TITLE + " DESC";
-
+        String[] where_values = {username};
         Cursor cursor = db.query(
                 ReminderEntry.TABLE_NAME,                  // The table to query
                 projection,                               // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                                     // The values for the WHERE clause
+                ReminderEntry.COLUMN_PROFILE_ID + " = ? ",                                     // The columns for the WHERE clause
+                where_values,                                     // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
                 sortOrder                                 // The sort order
@@ -303,9 +306,9 @@ public final class FeedReaderContract {
 
         List items = new ArrayList<>();
         while (cursor.moveToNext()) {
-            String username = cursor.getString(
-                    cursor.getColumnIndexOrThrow(ReminderEntry.COLUMN_TITLE));
-            items.add(username);
+            String id = cursor.getString(
+                    cursor.getColumnIndexOrThrow(ReminderEntry._ID));
+            items.add(id);
         }
         cursor.close();
         return items;

@@ -2,6 +2,7 @@ package com.medi.marcin.medicalendar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -60,6 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         String mobilePhone = ((EditText)findViewById(R.id.txt_mobile_phone)).getText().toString();
         String dateOfBirth = ((TextView)findViewById(R.id.txt_date_of_birth)).getText().toString();
         addProfile(getApplicationContext(), firstName, lastName, mobilePhone, dateOfBirth);
+        Intent successfullyAddedProfile = new Intent(this, MainActivity.class);
+        startActivity(successfullyAddedProfile);
     }
 
     public void showDatePickerDialog(View v) {

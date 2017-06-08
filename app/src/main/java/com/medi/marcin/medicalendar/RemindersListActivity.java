@@ -13,9 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
-import static com.medi.marcin.medicalendar.FeedReaderContract.listUsernames;
+import static com.medi.marcin.medicalendar.FeedReaderContract.listReminders;
+import static com.medi.marcin.medicalendar.FeedReaderContract.getReminderInfo;
 
 /**
  * Created by marcin on 21.05.17.
@@ -36,6 +39,32 @@ public class RemindersListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         this.username = intent.getStringExtra(MainActivity.PROFILENAME_MESSAGE);
+
+        final ListView profilesList = (ListView)findViewById(R.id.reminders_list);
+
+        List remindersIDs = listReminders(getApplicationContext(), this.username);
+        List remindersNames = new ArrayList<>();
+        for (int i=0; i<remindersIDs.size(); i++){
+            Hashtable<String, String> reminderData = new Hashtable<>();
+            String reminderID = remindersIDs.get(i).toString();
+            reminderData = getReminderInfo(getApplicationContext(), reminderID);
+            String reminderName = reminderData.get("title") + "\n"
+                    + reminderData.get("comment") + "\n"
+                    + reminderData.get("date") + " " + reminderData.get("time") + "\n";
+            remindersNames.add(reminderName);
+        }
+
+        ArrayAdapter<String> profilesListAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, remindersNames);
+
+        profilesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+                String item = (String) profilesList.getItemAtPosition(position);
+                // go to reminder
+
+            }
+        });
+        profilesList.setAdapter(profilesListAdapter);
     }
 
     @Override

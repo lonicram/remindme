@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -77,10 +78,29 @@ public class ReminderActivity extends AppCompatActivity {
 
     public void saveReminder(View view){
         String title = ((EditText)findViewById(R.id.txt_entry_title)).getText().toString();
-        String date = ((EditText)findViewById(R.id.txt_entry_date)).getText().toString();
-        String time = ((EditText)findViewById(R.id.txt_entry_time)).getText().toString();
+        String date = ((TextView)findViewById(R.id.txt_entry_date)).getText().toString();
+        String time = ((TextView)findViewById(R.id.txt_entry_time)).getText().toString();
         String comment = ((EditText)findViewById(R.id.txt_entry_comment)).getText().toString();
+        if((title.isEmpty()) || (date.isEmpty()) || (time.isEmpty())) {
+            ((TextView)findViewById(R.id.txt_alert)).setText("Fill all fields");
+            return;
+        }
         addReminder(getApplicationContext(), comment, date, time, title, this.username);
-        ((TextView) findViewById(R.id.status)).setText("success");
+        ((TextView) findViewById(R.id.status)).setText("Successfully added");
+        Intent intent = new Intent(this, RemindersListActivity.class);
+        intent.putExtra(MainActivity.PROFILENAME_MESSAGE, this.username);
+        startActivity(intent);
+    }
+
+    public void showTimePickerDialog(View v){
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(),"TimePicker");
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment(
+                ((TextView)findViewById(R.id.txt_entry_date))
+        );
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
