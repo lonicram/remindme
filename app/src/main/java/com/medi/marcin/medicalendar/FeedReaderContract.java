@@ -388,14 +388,14 @@ public final class FeedReaderContract {
 
         String[] whereArgs = {id};
         // Insert the new row, returning the primary key value of the new row
-        int newRowId = db.update(ProfileEntry.TABLE_NAME, values, "_id=?", whereArgs);
+        int newRowId = db.update(ReminderEntry.TABLE_NAME, values, "_id=?", whereArgs);
         return newRowId;
     }
 
     public static boolean deleteReminder(Context context, String id){
         SQLiteDatabase db = getWritableDb(context);
         String[] whereArgs = {id};
-        return db.delete(ProfileEntry.TABLE_NAME, "_id = ?", whereArgs) > 0;
+        return db.delete(ReminderEntry.TABLE_NAME, "_id = ?", whereArgs) > 0;
     }
 }
 

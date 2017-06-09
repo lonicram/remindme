@@ -61,7 +61,7 @@ public class RemindersListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
                 String reminderID = (String) remindersIDs.get(position);
                 // go to reminder
-                goToReminderView(reminderID);
+                goToPreviewReminderView(reminderID);
             }
         });
         profilesList.setAdapter(profilesListAdapter);
@@ -89,7 +89,10 @@ public class RemindersListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToReminderView(String id){
+    public void goToReminderView(View view){
+        goToPreviewReminderView(null);
+    }
+    public void goToPreviewReminderView(String id){
         Intent intent = new Intent(this, ReminderActivity.class);
         intent.putExtra(MainActivity.PROFILENAME_MESSAGE, this.username);
         intent.putExtra(this.REMINDER_ID, id);

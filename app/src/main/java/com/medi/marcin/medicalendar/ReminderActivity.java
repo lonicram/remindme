@@ -149,6 +149,7 @@ public class ReminderActivity extends AppCompatActivity {
     }
     public void goToRemindersList(){
         Intent intent = new Intent(this, RemindersListActivity.class);
+        intent.putExtra(MainActivity.PROFILENAME_MESSAGE, this.username);
         startActivity(intent);
     }
 }
